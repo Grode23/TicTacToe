@@ -3,7 +3,7 @@
 
 //Display the board
 void display(char choices[9]){
-
+	
     int currChoice = 0;
 
     for(int i = 0; i < 5; i++){
@@ -100,7 +100,7 @@ bool checkWin(char choices[9], char* mark){
     return false;
 }
 
-int main(){
+/*int main(){
     
     char currGame[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}; 
     char mark = 'O';
@@ -118,4 +118,4 @@ int main(){
     }    
 
     return 0;
-}
+}*/
