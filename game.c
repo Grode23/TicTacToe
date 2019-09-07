@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 //Display the board
 void display(char choices[9]){
@@ -100,7 +101,7 @@ bool checkWin(char choices[9], char* mark){
     return false;
 }
 
-/*int main(){
+int start(){
     
     char currGame[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}; 
     char mark = 'O';
@@ -118,4 +119,4 @@ bool checkWin(char choices[9], char* mark){
     }    
 
     return 0;
-}*/
+}

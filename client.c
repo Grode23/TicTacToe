@@ -1,12 +1,14 @@
-// Write CPP code here 
+#include <stdio.h>
+#include <unistd.h> //For read and write
 #include <netdb.h> 
+#include <arpa/inet.h> //For inet_addr
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <string.h> 
 #include <sys/socket.h> 
-#include "../include/header.h"
+#include "header.h"
 
-void func(int sockfd) 
+void communication(int sockfd) 
 { 
 	char buff[MAX]; 
 	int n; 
@@ -14,8 +16,7 @@ void func(int sockfd)
 		bzero(buff, sizeof(buff)); 
 		printf("Enter the string : "); 
 		n = 0; 
-		while ((buff[n++] = getchar()) != '\n') 
-			; 
+		while ((buff[n++] = getchar()) != '\n'); 
 		write(sockfd, buff, sizeof(buff)); 
 		bzero(buff, sizeof(buff)); 
 		read(sockfd, buff, sizeof(buff)); 
@@ -56,7 +57,7 @@ int main()
 		printf("connected to the server..\n"); 
 
 	// function for chat 
-	func(sockfd); 
+	communication(sockfd); 
 
 	// close the socket 
 	close(sockfd); 

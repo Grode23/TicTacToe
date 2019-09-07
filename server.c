@@ -1,39 +1,56 @@
+#include <stdio.h>
+#include <unistd.h> //For read and write
 #include <netdb.h> 
 #include <netinet/in.h> 
 #include <stdlib.h> 
 #include <string.h> 
 #include <sys/socket.h> 
 #include <sys/types.h> 
-#include "../include/header.h"
+
+#include "header.h"
+#include "game.h"
 
 // Function designed for chat between client and server. 
 void func(int sockfd) 
 { 
+	int currChoice;
 	char buff[MAX]; 
 	int n; 
-	// infinite loop for chat 
+
+	//Ask the client if they want to play
+	bzero(buff, MAX);
+	strcpy(buff, "Do you want to play?");
+	write(sockfd, buff, sizeof(buff));
+
+
+	if(strcmp(buff, "n")){
+		exit(0);
+	}
+
+	// infinite loop for responing 
 	for (;;) { 
-		bzero(buff, MAX); 
+		bzero(buff, MAX);
+	
+	    // read the message from client and copy it in buffer
+        //read(sockfd, const int* currChoice, sizeof(currChoice));
 
-		// read the message from client and copy it in buffer 
-		read(sockfd, buff, sizeof(buff)); 
-		// print buffer which contains the client contents 
-		printf("From client: %s\t To client : ", buff); 
-		bzero(buff, MAX); 
-		n = 0; 
-		// copy server message in the buffer 
-		while ((buff[n++] = getchar()) != '\n') 
-			; 
+        // print buffer which contains the client contents
+        printf("From client: %s To client : ", buff);
+        bzero(buff, MAX);
+        n = 0;
+        // copy server message in the buffer
+        while ((buff[n++] = getchar()) != '\n');
 
-		// and send that buffer to client 
-		write(sockfd, buff, sizeof(buff)); 
+        // and send that buffer to client
+        write(sockfd, buff, sizeof(buff));
 
-		// if msg contains "Exit" then server exit and chat ended. 
-		if (strncmp("exit", buff, 4) == 0) { 
-			printf("Server Exit...\n"); 
-			break; 
-		} 
+        // if msg contains "Exit" then server exit and chat ended.
+        if (strncmp("exit", buff, 4) == 0) {
+            printf("Server Exit...\n");
+            break;
+        }
 	} 
+
 } 
 
 // Driver function 
