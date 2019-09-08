@@ -80,7 +80,7 @@ void initialize(char* choices, char* mark){
 }
 
 //Check if the game is over
-bool checkWin(char choices[9], char* mark){
+bool checkWin(char* choices, char* mark){
    
 	bool winning[8];
 	winning[0] = choices[0] == choices[4] && choices[0] == choices[8] && choices[0] != ' '; 
