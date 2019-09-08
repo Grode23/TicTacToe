@@ -7,24 +7,39 @@
 #include <string.h> 
 #include <sys/socket.h> 
 #include "header.h"
+#include "game.h"
 
 void communication(int sockfd) 
 { 
-	char buff[MAX]; 
-	int n; 
+	char board[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+	int currChoice;
+	int returnStatus; 
+	char mark = 'X';
+
 	for (;;) { 
-		bzero(buff, sizeof(buff)); 
-		printf("Enter the string : "); 
-		n = 0; 
-		while ((buff[n++] = getchar()) != '\n'); 
-		write(sockfd, buff, sizeof(buff)); 
-		bzero(buff, sizeof(buff)); 
-		read(sockfd, buff, sizeof(buff)); 
-		printf("From Server : %s", buff); 
-		if ((strncmp(buff, "exit", 4)) == 0) { 
-			printf("Client Exit...\n"); 
-			break; 
-		} 
+
+		//Read the new int
+		int returnStatus = read(sockfd, &currChoice, sizeof(currChoice));
+		if (returnStatus > 0) {
+	   		fprintf(stdout, "Received int = %d\n", ntohl(currChoice));
+			board[htonl(currChoice)] = 'O';
+		}
+		else {
+		   printf("Damn, an error...\n");
+		}
+		//Display the board
+		display(board);
+
+		//Send the new int (choice)
+		currChoice = nextTurn(board, mark);
+
+		int convertedChoice = htonl(currChoice);
+		write(sockfd, &convertedChoice, sizeof(convertedChoice));
+
+		printf("Waiting the opponent to make their move...\n");
+
+		//Win/lose message
+
 	} 
 } 
 

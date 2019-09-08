@@ -3,8 +3,8 @@
 #include <string.h>
 
 //Display the board
-void display(char choices[9]){
-	
+void display(char* choices){
+
     int currChoice = 0;
 
     for(int i = 0; i < 5; i++){
@@ -27,7 +27,7 @@ void display(char choices[9]){
 }
 
 //Next turn of any player
-void nextTurn(char* choices, char mark){
+int nextTurn(char* choices, char mark){
     int num;
     printf("Where do you wish to play? (enter the number)\n");
 
@@ -39,6 +39,8 @@ void nextTurn(char* choices, char mark){
     }while(num <0 || num > 8 || choices[num] != ' ');
 
     choices[num] = mark;
+
+    return num;
 }
 
 //Ask if they want to play another game of TicTacToe
@@ -93,7 +95,7 @@ bool checkWin(char choices[9], char* mark){
 	for(int i = 0; i < sizeof(winning); i++){
 	
 	    if(winning[i]){
-	        printf("Player %c won!!!\n", choices[0]);
+	        printf("Player %c won!!!\n", *mark);
 			initialize(choices, mark);
 	        return playAgain();
 	    }

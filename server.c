@@ -6,49 +6,50 @@
 #include <string.h> 
 #include <sys/socket.h> 
 #include <sys/types.h> 
+#include <arpa/inet.h>
+
 
 #include "header.h"
 #include "game.h"
 
+
 // Function designed for chat between client and server. 
-void func(int sockfd) 
+void communication(int sockfd) 
 { 
+	char board[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
 	int currChoice;
-	char buff[MAX]; 
-	int n; 
-
-	//Ask the client if they want to play
-	bzero(buff, MAX);
-	strcpy(buff, "Do you want to play?");
-	write(sockfd, buff, sizeof(buff));
-
-
-	if(strcmp(buff, "n")){
-		exit(0);
-	}
+	int returnStatus; 
+	char mark = 'X';
 
 	// infinite loop for responing 
 	for (;;) { 
-		bzero(buff, MAX);
+
+		//Display board
+		display(board);
+
+		//Send the new int (choice)
+		currChoice = nextTurn(board, mark);
+
+		int convertedChoice = htonl(currChoice);
+		write(sockfd, &convertedChoice, sizeof(convertedChoice));
+
+		printf("Waiting the opponent to make their move...\n");
+
+		//Read the opponent's choice
+
+		int returnStatus = read(sockfd, &currChoice, sizeof(currChoice));
+		if (returnStatus > 0) {
+	   		fprintf(stdout, "Received int = %d\n", ntohl(currChoice));
+			board[htonl(currChoice)] = 'O';
+		}
+		else {
+		   printf("Damn, an error...\n");
+		}
+
+		//Show message if it's a win/lose
+		//checkWin();
+
 	
-	    // read the message from client and copy it in buffer
-        //read(sockfd, const int* currChoice, sizeof(currChoice));
-
-        // print buffer which contains the client contents
-        printf("From client: %s To client : ", buff);
-        bzero(buff, MAX);
-        n = 0;
-        // copy server message in the buffer
-        while ((buff[n++] = getchar()) != '\n');
-
-        // and send that buffer to client
-        write(sockfd, buff, sizeof(buff));
-
-        // if msg contains "Exit" then server exit and chat ended.
-        if (strncmp("exit", buff, 4) == 0) {
-            printf("Server Exit...\n");
-            break;
-        }
 	} 
 
 } 
@@ -67,6 +68,10 @@ int main()
 	} 
 	else
 		printf("Socket successfully created..\n"); 
+	
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int)) < 0)
+	    herror("setsockopt(SO_REUSEADDR) failed");
+
 	bzero(&servaddr, sizeof(servaddr)); 
 
 	// assign IP, PORT 
@@ -101,8 +106,10 @@ int main()
 		printf("server acccept the client...\n"); 
 
 	// Function for chatting between client and server 
-	func(connfd); 
+	communication(connfd); 
 
 	// After chatting close the socket 
 	close(sockfd); 
+
+	return 0;
 } 
