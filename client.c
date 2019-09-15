@@ -6,41 +6,28 @@
 #include <stdlib.h> 
 #include <string.h> 
 #include <sys/socket.h> 
+#include <stdbool.h>
+
 #include "header.h"
-#include "game.h"
+#include "communication.h"
 
 void communication(int sockfd) 
 { 
 	char board[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
 	int currChoice;
 	int returnStatus; 
-	char mark = 'X';
+	char mark = 'O';
+	bool finished = false;
+	bool winner = false;
 
-	for (;;) { 
+	while(finished == false) { 
 
-		//Read the new int
-		int returnStatus = read(sockfd, &currChoice, sizeof(currChoice));
-		if (returnStatus > 0) {
-	   		fprintf(stdout, "Received int = %d\n", ntohl(currChoice));
-			board[htonl(currChoice)] = 'O';
+		if(winner == true){
+			finished = playFirst(board, mark, sockfd, &winner);
+		} else {
+			finished = playSecond(board, mark, sockfd, &winner);
 		}
-		else {
-		   printf("Damn, an error...\n");
-		}
-		//Display the board
-		display(board);
-
-		//Send the new int (choice)
-		currChoice = nextTurn(board, mark);
-
-		int convertedChoice = htonl(currChoice);
-		write(sockfd, &convertedChoice, sizeof(convertedChoice));
-
-		printf("Waiting the opponent to make their move...\n");
-
-		//Win/lose message
-
-	} 
+	}
 } 
 
 int main() 
@@ -76,5 +63,4 @@ int main()
 
 	// close the socket 
 	close(sockfd); 
-} 
-
+}

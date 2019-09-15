@@ -7,48 +7,29 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #include <arpa/inet.h>
-
+#include <stdbool.h>
 
 #include "header.h"
-#include "game.h"
+#include "communication.h"
 
 
-// Function designed for chat between client and server. 
 void communication(int sockfd) 
 { 
 	char board[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
 	int currChoice;
-	int returnStatus; 
 	char mark = 'X';
+	bool finished = false;
+	//By default, server plays first
+	bool winner = true;
 
-	// infinite loop for responing 
-	for (;;) { 
+	while(finished == false) { 
 
-		//Display board
-		display(board);
+		if(winner == true){
+			finished = playFirst(board, mark, sockfd, &winner);
 
-		//Send the new int (choice)
-		currChoice = nextTurn(board, mark);
-
-		int convertedChoice = htonl(currChoice);
-		write(sockfd, &convertedChoice, sizeof(convertedChoice));
-
-		printf("Waiting the opponent to make their move...\n");
-
-		//Read the opponent's choice
-
-		int returnStatus = read(sockfd, &currChoice, sizeof(currChoice));
-		if (returnStatus > 0) {
-	   		fprintf(stdout, "Received int = %d\n", ntohl(currChoice));
-			board[htonl(currChoice)] = 'O';
+		} else {
+			finished = playSecond(board, mark, sockfd, &winner);
 		}
-		else {
-		   printf("Damn, an error...\n");
-		}
-
-		//Show message if it's a win/lose
-		//checkWin();
-
 	
 	} 
 
