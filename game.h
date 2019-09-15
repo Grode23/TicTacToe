@@ -1,7 +1,6 @@
-#include <stdbool.h>
 
 void display(char*);
 int nextTurn(char*, char);
-bool playAgain();
+int playAgain();
 void initialize(char*);
-bool checkWin(char*, char, bool*);
+int checkWin(char*, char, int*);

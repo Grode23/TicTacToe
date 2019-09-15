@@ -6,7 +6,6 @@
 #include <stdlib.h> 
 #include <string.h> 
 #include <sys/socket.h> 
-#include <stdbool.h>
 
 #include "header.h"
 #include "communication.h"
@@ -17,12 +16,12 @@ void communication(int sockfd)
 	int currChoice;
 	int returnStatus; 
 	char mark = 'O';
-	bool finished = false;
-	bool winner = false;
+	int finished = 0;
+	int winner = 0;
 
-	while(finished == false) { 
+	while(finished == 0) { 
 
-		if(winner == true){
+		if(winner == 1){
 			finished = playFirst(board, mark, sockfd, &winner);
 		} else {
 			finished = playSecond(board, mark, sockfd, &winner);

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <unistd.h> //For read and write
 #include <netdb.h> 
 #include <netinet/in.h> 
@@ -11,9 +10,9 @@
 
 #include "game.h"
 
-bool playFirst(char* board, char mark, int sockfd, bool* winner){
+int playFirst(char* board, char mark, int sockfd, int* winner){
 
-	bool finished = false;
+	int finished = 0;
 
 	//Display board
 	display(board);
@@ -25,8 +24,8 @@ bool playFirst(char* board, char mark, int sockfd, bool* winner){
 	
 	finished = checkWin(board, mark, winner);
 	
-	if(finished == true){
-		return finished;
+	if(finished == 1){
+		return 1;
 	}
 	printf("Waiting the opponent to make their move...\n");
 	
@@ -49,17 +48,17 @@ bool playFirst(char* board, char mark, int sockfd, bool* winner){
 	//Show message if it's a win/lose
 	finished = checkWin(board, mark, winner);
 
-	if(finished == true){
-		return finished;
+	if(finished == 1){
+		return 1;
 	}
 
 	
 
 }
 
-bool playSecond(char* board, char mark, int sockfd, bool* winner){
+int playSecond(char* board, char mark, int sockfd, int* winner){
 
-	bool finished = false;
+	int finished = 0;
 	int currChoice;
 
 	//Read the new int
@@ -83,8 +82,8 @@ bool playSecond(char* board, char mark, int sockfd, bool* winner){
 	finished == checkWin(board, mark, winner);
 	
 	//Win/lose message
-	if (finished == true){
-		return finished;
+	if (finished == 1){
+		return 1;
 	}
 	
 	//Send the new int (choice)
@@ -95,8 +94,8 @@ bool playSecond(char* board, char mark, int sockfd, bool* winner){
 	finished == checkWin(board, mark, winner);
 	
 	//Win/lose message
-	if (finished == true){
-		return finished;
+	if (finished == 1){
+		return 1;
 	}
 	
 	printf("Waiting the opponent to make their move...\n");

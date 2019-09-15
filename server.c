@@ -7,7 +7,6 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #include <arpa/inet.h>
-#include <stdbool.h>
 
 #include "header.h"
 #include "communication.h"
@@ -18,13 +17,13 @@ void communication(int sockfd)
 	char board[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
 	int currChoice;
 	char mark = 'X';
-	bool finished = false;
+	int finished = 0;
 	//By default, server plays first
-	bool winner = true;
+	int winner = 1;
 
-	while(finished == false) { 
+	while(finished == 0) { 
 
-		if(winner == true){
+		if(winner == 1){
 			finished = playFirst(board, mark, sockfd, &winner);
 
 		} else {

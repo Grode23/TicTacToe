@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 
 //Display the board
@@ -44,7 +43,7 @@ int nextTurn(char* choices, char mark){
 }
 
 //Ask if they want to play another game of TicTacToe
-bool playAgain(){
+int playAgain(){
     
     char decision;
 
@@ -55,10 +54,10 @@ bool playAgain(){
     }while(decision != 'n' && decision != 'N' && decision == 'y' && decision == 'Y');
 
     if(decision == 'y' || decision == 'Y'){
-        return false;
+        return 0;
     }
 
-    return true;
+    return 1;
 }
 
 //initialize every variable I need after a restart
@@ -71,9 +70,9 @@ void initialize(char* choices){
 }
 
 //Check if the game is over
-bool checkWin(char* choices, char mark, bool* winner){
+int checkWin(char* choices, char mark, int* winner){
    
-	bool winning[8];
+	int winning[8];
     char winningMark = ' ';
 	winning[0] = choices[0] == choices[4] && choices[0] == choices[8] && choices[0] != ' '; 
     winning[5] = choices[0] == choices[1] && choices[0] == choices[2] && choices[0] != ' ';
@@ -91,10 +90,10 @@ bool checkWin(char* choices, char mark, bool* winner){
 	    if(winning[i]){
             if(winningMark == mark){
                 printf("Winner!!!\n");
-                *winner = true;
+                *winner = 1;
             } else {
                 printf("Loser...\n");
-                *winner = false;
+                *winner = 0;
 
             }
 
@@ -102,5 +101,5 @@ bool checkWin(char* choices, char mark, bool* winner){
 	        return playAgain();
 	    }
 	}
-    return false;
+    return 0;
 }
