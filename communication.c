@@ -10,7 +10,26 @@
 
 #include "game.h"
 
-int playFirst(char* board, char mark, int sockfd, int* winner){
+int isEmpty(char* board, int size){
+
+	int counter = 0;
+
+	for(int i = 0; i < size; i++){
+		if(board[i] == ' '){
+			counter++;
+		}
+	}
+
+	if(counter == size){
+		return 1;
+	}
+
+	return 0;
+}
+
+
+
+int playFirst(char* board, char mark, int sockfd, int* winner, int size){
 
 	int finished = 0;
 
@@ -27,6 +46,12 @@ int playFirst(char* board, char mark, int sockfd, int* winner){
 	if(finished == 1){
 		return 1;
 	}
+
+	if(isEmpty(board, sizeof(board))){
+		return 0;
+	}
+
+	//αν εγινε initialize τοτε τελος
 	printf("Waiting the opponent to make their move...\n");
 	
 	//Read the opponent's choice
@@ -52,11 +77,13 @@ int playFirst(char* board, char mark, int sockfd, int* winner){
 		return 1;
 	}
 
+	return 0;
+
 	
 
 }
 
-int playSecond(char* board, char mark, int sockfd, int* winner){
+int playSecond(char* board, char mark, int sockfd, int* winner, int size){
 
 	int finished = 0;
 	int currChoice;
@@ -85,20 +112,33 @@ int playSecond(char* board, char mark, int sockfd, int* winner){
 	if (finished == 1){
 		return 1;
 	}
-	
+
+	printf("os edo\n");
+
+	if(isEmpty(board, sizeof(board))){
+		return 0;
+	}
+printf("os edo\n");
+
 	//Send the new int (choice)
 	currChoice = nextTurn(board, mark);
 	
 	int convertedChoice = htonl(currChoice);
 	write(sockfd, &convertedChoice, sizeof(convertedChoice));
 	finished == checkWin(board, mark, winner);
-	
+	printf("os edo\n");
 	//Win/lose message
 	if (finished == 1){
 		return 1;
 	}
+printf("os edo\n");
+	if(isEmpty(board, sizeof(board))){
+		return 0;
+	}
 	
 	printf("Waiting the opponent to make their move...\n");
+
+	return 0;
 
 
 }

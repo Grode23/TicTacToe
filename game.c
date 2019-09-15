@@ -71,23 +71,23 @@ void initialize(char* choices){
 
 //Check if the game is over
 int checkWin(char* choices, char mark, int* winner){
-   
+
 	int winning[8];
     char winningMark = ' ';
 	winning[0] = choices[0] == choices[4] && choices[0] == choices[8] && choices[0] != ' '; 
-    winning[5] = choices[0] == choices[1] && choices[0] == choices[2] && choices[0] != ' ';
-	winning[1] = choices[2] == choices[4] && choices[2] == choices[6] && choices[2] != ' ';
-	winning[2] = choices[0] == choices[3] && choices[0] == choices[6] && choices[0] != ' ';
-    winning[6] = choices[3] == choices[4] && choices[3] == choices[5] && choices[3] != ' ';
-	winning[4] = choices[2] == choices[5] && choices[2] == choices[8] && choices[2] != ' ';
-	winning[7] = choices[6] == choices[7] && choices[6] == choices[8] && choices[6] != ' ';
-    winning[3] = choices[1] == choices[4] && choices[1] == choices[7] && choices[1] != ' ';
+    winning[1] = choices[0] == choices[1] && choices[0] == choices[2] && choices[0] != ' ';
+	winning[2] = choices[2] == choices[4] && choices[2] == choices[6] && choices[2] != ' ';
+	winning[3] = choices[0] == choices[3] && choices[0] == choices[6] && choices[0] != ' ';
+    winning[4] = choices[3] == choices[4] && choices[3] == choices[5] && choices[3] != ' ';
+	winning[5] = choices[2] == choices[5] && choices[2] == choices[8] && choices[2] != ' ';
+	winning[6] = choices[6] == choices[7] && choices[6] == choices[8] && choices[6] != ' ';
+    winning[7] = choices[1] == choices[4] && choices[1] == choices[7] && choices[1] != ' ';
 	
-	for(int i = 0; i < sizeof(winning); i++){
-	
+	for(int i = 0; i < sizeof(winning)/sizeof(int); i++){
+
         winningMark = choices[i];
 
-	    if(winning[i]){
+	    if(winning[i] != 0){
             if(winningMark == mark){
                 printf("Winner!!!\n");
                 *winner = 1;

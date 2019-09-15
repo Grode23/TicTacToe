@@ -22,10 +22,12 @@ void communication(int sockfd)
 	while(finished == 0) { 
 
 		if(winner == 1){
-			finished = playFirst(board, mark, sockfd, &winner);
+			finished = playFirst(board, mark, sockfd, &winner, sizeof(board));
 		} else {
-			finished = playSecond(board, mark, sockfd, &winner);
+			finished = playSecond(board, mark, sockfd, &winner, sizeof(board));
 		}
+
+
 	}
 } 
 
